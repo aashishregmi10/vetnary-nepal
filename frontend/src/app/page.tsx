@@ -1,4 +1,4 @@
-import { Banknote, Truck, Package, Star, CheckCircle2 } from "lucide-react";
+import { Banknote, Truck, Package, Star, CheckCircle2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { apiGet } from "@/lib/api";
 import { ProductCard } from "@/components/products/ProductCard";
@@ -42,16 +42,23 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="/products"
-                className="inline-flex items-center rounded-md bg-accent px-5 py-3 font-data text-sm uppercase tracking-wide text-white transition-colors hover:bg-accent-hover"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 font-body font-medium text-white shadow-md transition-colors hover:bg-accent-hover"
               >
                 Shop all products
+                <ArrowRight className="size-4" />
               </a>
               <a
-                href="/species/dogs"
-                className="inline-flex items-center rounded-md border border-border px-5 py-3 font-data text-sm uppercase tracking-wide text-text transition-colors hover:border-accent hover:text-accent"
+                href="/species/dog"
+                className="inline-flex items-center rounded-full border border-border bg-surface px-6 py-3.5 font-body font-medium text-text transition-colors hover:border-accent hover:text-accent"
               >
                 Shop for dogs
               </a>
+            </div>
+
+            <div className="mt-10 flex gap-10">
+              <Stat value="7" label="Provinces served" />
+              <Stat value="1.2k+" label="Happy tails" />
+              <Stat value="48h" label="Kathmandu delivery" />
             </div>
           </div>
           <div className="hidden md:col-span-5 md:block">
@@ -106,6 +113,15 @@ export default async function HomePage() {
         )}
       </section>
     </>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div>
+      <p className="font-display text-3xl text-text">{value}</p>
+      <p className="mt-1 max-w-[8rem] font-body text-xs uppercase tracking-wide text-muted">{label}</p>
+    </div>
   );
 }
 
