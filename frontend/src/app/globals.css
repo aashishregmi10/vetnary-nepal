@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/*
+  PawMart — red / light-grey e-commerce palette (matches the supplied reference:
+  grey screen behind, white cards, red accent, card border turns red on hover).
+  This block is the single source of truth for the palette.
+*/
+@theme {
+  --color-bg: #f4f5f7; /* pale cool grey — page background behind cards */
+  --color-surface: #ffffff; /* white cards / panels */
+  --color-text: #1f1f1f; /* near-black — titles + body */
+  --color-accent: #1a73e8; /* blue — price, CTAs, active/hover states */
+  --color-accent-hover: #1558b0;
+  --color-muted: #9a9a9a; /* grey — captions, "No reviews yet", strikethrough */
+  --color-border: #e8e8e8; /* light card border / hairline */
+  --color-sale: #1a73e8; /* same blue for the discount badge */
+  --color-star: #faad14; /* gold — filled rating stars */
+  --color-star-empty: #dcdcdc; /* soft grey — empty rating stars */
+
+  /* Reference look is fully sans-serif — display + body share the same clean sans. */
+  --font-display: var(--font-karla), "Public Sans", system-ui, sans-serif;
+  --font-body: var(--font-karla), "Public Sans", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
