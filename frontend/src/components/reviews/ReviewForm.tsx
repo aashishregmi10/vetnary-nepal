@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { Star } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/stores/auth";
+import { useAuthModal } from "@/lib/stores/authModal";
 import { clientApi, ClientApiError } from "@/lib/client-api";
 
 export function ReviewForm({ slug, onPosted }: { slug: string; onPosted: () => void }) {
-  const router = useRouter();
   const { token } = useAuth();
+  const openAuthModal = useAuthModal((s) => s.open);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [title, setTitle] = useState("");
@@ -20,7 +20,7 @@ export function ReviewForm({ slug, onPosted }: { slug: string; onPosted: () => v
   if (!token) {
     return (
       <p className="font-body text-sm text-muted">
-        <button onClick={() => router.push(`/login?next=/products/${slug}`)} className="text-accent hover:underline">
+        <button onClick={() => openAuthModal("login")} className="text-accent hover:underline">
           Sign in
         </button>{" "}
         to leave a review.

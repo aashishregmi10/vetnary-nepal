@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/stores/auth";
+import { useWishlist } from "@/lib/stores/wishlist";
 import { clientApi } from "@/lib/client-api";
 
 const NAV = [
@@ -35,6 +36,7 @@ export default function AdminDashLayout({ children }: { children: React.ReactNod
       /* ignore */
     }
     clear();
+    useWishlist.getState().reset();
     router.replace("/admin/login");
   }
 

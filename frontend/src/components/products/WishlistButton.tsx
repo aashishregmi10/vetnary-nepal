@@ -1,25 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+import { useAuth } from "@/lib/stores/auth";
+import { useAuthModal } from "@/lib/stores/authModal";
+import { useWishlist } from "@/lib/stores/wishlist";
 
 interface WishlistButtonProps {
   productId: string;
   className?: string;
 }
 
-// TODO: wire up to /api/wishlist once the account-gated wishlist endpoints exist (task #5+).
-// For now this is a local-only toggle so the card UI/interaction can be reviewed end-to-end.
 export function WishlistButton({ productId, className }: WishlistButtonProps) {
-  const [wishlisted, setWishlisted] = useState(false);
+  const { token, hydrated } = useAuth();
+  const openAuthModal = useAuthModal((s) => s.open);
+  const { has, add, remove, load } = useWishlist();
+  const [busy, setBusy] = useState(false);
+  const wishlisted = has(productId);
+
+  useEffect(() => {
+    if (hydrated && token) load();
+  }, [hydrated, token, load]);
+
+  async function toggle() {
+    if (!token) {
+      openAuthModal("login");
+      return;
+    }
+    setBusy(true);
+    try {
+      if (wishlisted) await remove(productId);
+      else await add(productId);
+    } catch {
+      /* store already rolled back optimistic update */
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <button
-      onClick={() => setWishlisted((v) => !v)}
+      onClick={toggle}
+      disabled={busy}
       aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
       aria-pressed={wishlisted}
       data-product-id={productId}
-      className={`group grid size-8 place-items-center rounded-full bg-surface shadow-sm transition-colors ${className || ""}`}
+      className={`group grid size-8 place-items-center rounded-full bg-surface shadow-sm transition-colors disabled:opacity-60 ${className || ""}`}
     >
       <Heart
         className={`size-[18px] transition-all group-hover:scale-110 ${

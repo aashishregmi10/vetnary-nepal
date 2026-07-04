@@ -116,7 +116,7 @@ export default async function CategoryPage({
           Nothing on this shelf yet — check back soon or browse everything else we&apos;ve got.
         </p>
       ) : (
-        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {data.items.map((p) => (
             <ProductCard key={p._id} product={p} />
           ))}

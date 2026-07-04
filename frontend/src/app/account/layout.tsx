@@ -1,20 +1,33 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/stores/auth";
+import { useAuthModal } from "@/lib/stores/authModal";
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const { token, hydrated } = useAuth();
+  const openAuthModal = useAuthModal((s) => s.open);
 
   useEffect(() => {
-    if (hydrated && !token) router.replace("/login?next=/account");
-  }, [hydrated, token, router]);
+    if (hydrated && !token) openAuthModal("login");
+  }, [hydrated, token, openAuthModal]);
 
-  if (!hydrated || !token) {
-    return <div className="grid min-h-[50vh] place-items-center bg-bg font-body text-muted">Checking access…</div>;
+  if (!hydrated) {
+    return <div className="grid min-h-[50vh] place-items-center bg-bg font-body text-muted">Loading…</div>;
+  }
+
+  if (!token) {
+    return (
+      <div className="grid min-h-[50vh] place-items-center bg-bg px-6 text-center font-body text-muted">
+        <div>
+          <p>Sign in to see your account.</p>
+          <button onClick={() => openAuthModal("login")} className="mt-2 text-accent hover:underline">
+            Sign in
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/stores/auth";
+import { useWishlist } from "@/lib/stores/wishlist";
 import { clientApi } from "@/lib/client-api";
 
 export default function AccountPage() {
@@ -16,6 +17,7 @@ export default function AccountPage() {
       /* ignore — clear locally regardless */
     }
     clear();
+    useWishlist.getState().reset();
     router.replace("/");
   }
 

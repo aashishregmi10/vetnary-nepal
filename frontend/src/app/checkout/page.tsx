@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/lib/stores/cart";
 import { useAuth } from "@/lib/stores/auth";
+import { useAuthModal } from "@/lib/stores/authModal";
 import { clientApi, ClientApiError } from "@/lib/client-api";
 import { npr } from "@/lib/format";
 
@@ -16,21 +17,34 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, hydrated: cartHydrated, clear } = useCart();
   const { token, hydrated: authHydrated } = useAuth();
+  const openAuthModal = useAuthModal((s) => s.open);
 
   const [form, setForm] = useState({ fullName: "", phone: "", province: "Bagmati", city: "", street: "", landmark: "" });
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  // Not logged in → send to login and come back here afterward.
+  // Not logged in → open the sign-in modal in place; the checkout form appears once token is set.
   useEffect(() => {
-    if (authHydrated && !token) router.replace("/login?next=/checkout");
-  }, [authHydrated, token, router]);
+    if (authHydrated && !token) openAuthModal("login");
+  }, [authHydrated, token, openAuthModal]);
 
   if (!authHydrated || !cartHydrated) {
     return <div className="mx-auto max-w-4xl px-6 py-16 font-body text-muted">Loading…</div>;
   }
-  if (!token) return null;
+  if (!token) {
+    return (
+      <div className="mx-auto max-w-2xl px-6 py-20 text-center">
+        <h1 className="font-display text-3xl text-text">Sign in to check out</h1>
+        <p className="mt-2 font-body text-muted">
+          <button onClick={() => openAuthModal("login")} className="text-accent hover:underline">
+            Sign in
+          </button>{" "}
+          to place your order.
+        </p>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

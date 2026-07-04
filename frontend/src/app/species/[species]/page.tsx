@@ -106,7 +106,7 @@ export default async function SpeciesPage({
       {data.items.length === 0 ? (
         <p className="mt-10 font-body text-muted">Nothing here yet for {info.name.toLowerCase()} — check back soon.</p>
       ) : (
-        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {data.items.map((p) => (
             <ProductCard key={p._id} product={p} />
           ))}
