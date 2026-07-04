@@ -1,8 +1,10 @@
-import { Banknote, Truck, Package } from "lucide-react";
+import { Banknote, Truck, Package, Star, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 import { apiGet } from "@/lib/api";
 import { ProductCard } from "@/components/products/ProductCard";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { organizationLd, websiteLd } from "@/lib/seo";
+import { npr } from "@/lib/format";
 import type { ProductCardData } from "@/lib/types";
 
 async function getFeaturedProducts() {
@@ -53,13 +55,30 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="hidden md:col-span-5 md:block">
-            {/* Real product/lifestyle photography goes here once available — intentionally
-                left as a designed placeholder rather than a stock photo (see design-system rules). */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-accent/5">
-              <div className="flex h-full items-center justify-center">
-                <p className="max-w-[70%] text-center font-display text-2xl leading-tight text-accent/70">
-                  Real product photography coming soon
-                </p>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border shadow-sm">
+              <Image
+                src="/hero-pets.jpg"
+                alt="A dog and cat, PawMart customers' pets, side by side"
+                fill
+                priority
+                sizes="(max-width: 1024px) 40vw, 480px"
+                className="object-cover"
+              />
+
+              <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 shadow-sm">
+                <Star className="size-3.5 fill-star text-star" />
+                <span className="font-body text-xs font-medium text-text">4.9 · from 320 Nepali homes</span>
+              </div>
+
+              <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 shadow-sm">
+                <CheckCircle2 className="size-3.5 fill-accent text-white" />
+                <span className="font-body text-xs font-medium text-text">Order confirmed · Bhaktapur</span>
+              </div>
+
+              <div className="absolute bottom-3 left-3 max-w-[75%] rounded-xl bg-surface p-4 shadow-sm">
+                <p className="font-body text-[11px] uppercase tracking-wide text-muted">Today&apos;s pick</p>
+                <p className="mt-1 font-display text-lg leading-snug text-text">Bone biscuits, freshly baked</p>
+                <p className="mt-1 font-body text-sm font-bold text-accent">{npr(380)}</p>
               </div>
             </div>
           </div>

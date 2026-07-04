@@ -6,7 +6,7 @@
   This block is the single source of truth for the palette.
 */
 @theme {
-  --color-bg: #f4f5f7; /* pale cool grey — page background behind cards */
+  --color-bg: #ffffff; /* pure white — page background behind cards; cards read as one bright surface, separated only by borders */
   --color-surface: #ffffff; /* white cards / panels */
   --color-text: #1f1f1f; /* near-black — titles + body */
   --color-accent: #1a73e8; /* blue — price, CTAs, active/hover states */
