@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { clientApi, ClientApiError } from "@/lib/client-api";
 import type { Category } from "@/lib/types";
 
-interface AdminCategory extends Category {
+interface AdminCategory extends Omit<Category, "parent"> {
   parent: (Category & { _id: string }) | null | string;
 }
 
