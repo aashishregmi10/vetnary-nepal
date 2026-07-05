@@ -13,7 +13,7 @@ interface AdminOrder {
   total: number;
   status: string;
   createdAt: string;
-  deliveryAddress: { province: string; city: string };
+  deliveryAddress: { province?: string; district?: string; municipality?: string; city?: string };
 }
 
 export default function AdminOrders() {
@@ -49,7 +49,9 @@ export default function AdminOrders() {
                 <td className="px-4 py-3 font-mono text-xs text-text">{o.orderNumber}</td>
                 <td className="px-4 py-3 text-text">{o.user?.fullName || "—"}</td>
                 <td className="px-4 py-3 text-muted">
-                  {o.deliveryAddress?.city}, {o.deliveryAddress?.province}
+                  {[o.deliveryAddress?.municipality, o.deliveryAddress?.district, o.deliveryAddress?.province]
+                    .filter(Boolean)
+                    .join(", ") || "—"}
                 </td>
                 <td className="px-4 py-3 text-text">{npr(o.total)}</td>
                 <td className="px-4 py-3">

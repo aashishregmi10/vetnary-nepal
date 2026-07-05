@@ -5,12 +5,13 @@ const PROVINCES = ['Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali
 
 const addressSchema = new Schema(
   {
-    label: String, // "Home", "Office"
+    label: { type: String, default: 'Home' }, // address type: Home / Office / Other
     fullName: String,
     phone: String,
     province: { type: String, enum: PROVINCES },
-    city: String,
-    street: String,
+    district: String,
+    municipality: String, // municipality / area
+    street: String, // full delivery address line (house no., street, etc.)
     landmark: String,
     isDefault: { type: Boolean, default: false },
   },

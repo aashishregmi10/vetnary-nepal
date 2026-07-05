@@ -12,13 +12,13 @@ async function list(req, res, next) {
 
 async function add(req, res, next) {
   try {
-    const { label, fullName, phone, province, city, street, landmark, isDefault } = req.body;
-    if (!fullName || !phone || !province) {
-      return fail(res, 'Name, phone and province are required', 400, [{ code: 'MISSING_FIELDS' }]);
+    const { label, fullName, phone, province, district, municipality, street, landmark, isDefault } = req.body;
+    if (!fullName || !phone || !province || !district || !street) {
+      return fail(res, 'Name, phone, province, district and address are required', 400, [{ code: 'MISSING_FIELDS' }]);
     }
     const user = await User.findById(req.userId).select('addresses');
     if (isDefault) user.addresses.forEach((a) => (a.isDefault = false));
-    user.addresses.push({ label, fullName, phone, province, city, street, landmark, isDefault: !!isDefault });
+    user.addresses.push({ label, fullName, phone, province, district, municipality, street, landmark, isDefault: !!isDefault });
     await user.save();
     return created(res, user.addresses, 'Address added');
   } catch (err) {
@@ -32,7 +32,7 @@ async function update(req, res, next) {
     const addr = user.addresses.id(req.params.addressId);
     if (!addr) return next(new ApiError('Address not found', 404, 'NOT_FOUND'));
 
-    const fields = ['label', 'fullName', 'phone', 'province', 'city', 'street', 'landmark'];
+    const fields = ['label', 'fullName', 'phone', 'province', 'district', 'municipality', 'street', 'landmark'];
     fields.forEach((f) => {
       if (req.body[f] !== undefined) addr[f] = req.body[f];
     });

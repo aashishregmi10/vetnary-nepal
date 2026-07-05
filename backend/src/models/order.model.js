@@ -23,11 +23,22 @@ const orderSchema = new Schema(
     deliveryAddress: {
       fullName: String,
       phone: String,
+      email: String,
+      alternatePhone: String,
+      addressType: { type: String, default: 'Home' },
       province: String,
-      city: String,
-      street: String,
+      district: String,
+      municipality: String,
+      street: String, // full delivery address line
       landmark: String,
     },
+    // Optional recipient when the order is received by someone other than the buyer.
+    receiveOnBehalf: {
+      name: String,
+      contact: String,
+    },
+    deliveryNotes: String,
+
     deliveryFee: { type: Number, required: true, default: 0 },
     subtotal: { type: Number, required: true },
     total: { type: Number, required: true },

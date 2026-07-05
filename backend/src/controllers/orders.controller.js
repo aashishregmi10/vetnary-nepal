@@ -7,12 +7,26 @@ const { nextOrderNumber } = require('../methods/orderNumber');
 // Build the order from server-trusted product data — never trust client-sent prices.
 async function create(req, res, next) {
   try {
-    const { items, deliveryAddress, customerNote } = req.body;
+    const { items, deliveryAddress, customerNote, deliveryNotes, receiveOnBehalf } = req.body;
     if (!Array.isArray(items) || items.length === 0) {
       return fail(res, 'Your cart is empty', 400, [{ code: 'EMPTY_CART' }]);
     }
-    if (!deliveryAddress || !deliveryAddress.fullName || !deliveryAddress.phone || !deliveryAddress.province) {
-      return fail(res, 'A delivery address with name, phone and province is required', 400, [{ code: 'MISSING_ADDRESS' }]);
+    if (
+      !deliveryAddress ||
+      !deliveryAddress.fullName ||
+      !deliveryAddress.phone ||
+      !deliveryAddress.province ||
+      !deliveryAddress.district ||
+      !deliveryAddress.street
+    ) {
+      return fail(res, 'Please provide a full delivery address (name, phone, province, district, and address)', 400, [
+        { code: 'MISSING_ADDRESS' },
+      ]);
+    }
+    if (receiveOnBehalf && receiveOnBehalf.enabled && (!receiveOnBehalf.name || !receiveOnBehalf.contact)) {
+      return fail(res, 'Recipient name and contact are required for receive-on-behalf', 400, [
+        { code: 'MISSING_RECIPIENT' },
+      ]);
     }
 
     const productIds = items.map((i) => i.productId);
@@ -47,11 +61,20 @@ async function create(req, res, next) {
       deliveryAddress: {
         fullName: deliveryAddress.fullName,
         phone: deliveryAddress.phone,
+        email: deliveryAddress.email,
+        alternatePhone: deliveryAddress.alternatePhone,
+        addressType: deliveryAddress.addressType || 'Home',
         province: deliveryAddress.province,
-        city: deliveryAddress.city,
+        district: deliveryAddress.district,
+        municipality: deliveryAddress.municipality,
         street: deliveryAddress.street,
         landmark: deliveryAddress.landmark,
       },
+      receiveOnBehalf:
+        receiveOnBehalf && receiveOnBehalf.enabled
+          ? { name: receiveOnBehalf.name, contact: receiveOnBehalf.contact }
+          : undefined,
+      deliveryNotes,
       deliveryFee: fee,
       subtotal,
       total: subtotal + fee,
